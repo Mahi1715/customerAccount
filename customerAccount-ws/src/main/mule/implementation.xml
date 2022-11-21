@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:db="http://www.mulesoft.org/schema/mule/db"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<db:config name="Database_Config" doc:name="Database Config" doc:id="98dd597c-d95f-4bb3-b458-5a886f39d5f5" >
+		<db:my-sql-connection host="mudb.learn.mulesoft.com" port="3306" user="mule" password="mule" database="training" />
+	</db:config>
+	<flow name="get-all-accounts" doc:id="fb16b095-768a-400e-a5e9-c8837d55a850" >
+		<db:select doc:name="Select" doc:id="e04934b9-70bd-43cf-a405-d36ef043ba29" config-ref="Database_Config">
+			<db:sql ><![CDATA[SELECT * FROM flights_customers]]></db:sql>
+		</db:select>
+		<ee:transform doc:name="Transform Message" doc:id="be9110bf-aa09-4100-82f4-30c2c6c3e215">
+			<ee:message>
+				<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+payload map ( payload01 , indexOfPayload01 ) -> {
+	CreationDate: payload01.creationDate as String,
+	Type: payload01.accountType default "",
+	"Air Miles": payload01.miles default 0,
+	Address: {
+		zipCode: payload01.postal as Number default 0,
+		streetAddress: payload01.street default "",
+		state: payload01.state default ""
+	},
+	ID: payload01.accountID as Number
+} 
+
+    ]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+	<flow name="post-accounts" doc:id="a0e55971-3e03-4f55-a366-e2834b61f1c3">
+		<ee:transform doc:name="Transform Message" doc:id="d21449a8-259f-4384-adb6-c08429e10974" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+ message: "account Added"
+ 
+ }]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+</mule>

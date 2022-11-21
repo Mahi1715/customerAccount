@@ -1,0 +1,20 @@
+#%RAML 1.0 DataType
+type: array
+items:
+  type: object
+  properties:
+    ID?:  integer
+    Name: string
+    Type: string
+    Address: 
+      type: object
+      properties:
+        streetAddress: string
+        state: string
+        zipCode: number
+    CreationDate: 
+      required: false
+      type: datetime-only
+    Air Miles: integer
+      
+  

@@ -1,0 +1,4 @@
+%dw 2.0
+
+type auto_a0e55971_3e03_4f55_a366_e2834b61f1c3_Input_Payload = Array<{  CreationDate?: String,   Type: String,   "Air Miles": Number,   Address: {    zipCode: Number,     streetAddress: String,     state: String,     _?: Any  },   ID?: Number,   Name: String,   _?: Any}>
+

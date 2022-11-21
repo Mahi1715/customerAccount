@@ -1,0 +1,48 @@
+#%RAML 1.0
+title: customer-account
+baseUri: http://localhost
+types:
+  customer-account: !include /DataType/dataType.raml
+
+/accounts:
+  get:
+    queryParameters:
+      accountType :
+        required: false
+        enum: [busness,personal]
+      accountName:
+        required: false
+    headers:
+      user_id:
+        required: true
+        description: The person or system requesting the data
+    responses:
+      200:
+        body:
+          application/json:
+            type: customer-account 
+            example: !include /exchange_modules/6bb47829-17ad-4f9f-997e-b4f477a5cd77/customer-account-example-01/1.0.1/customer-account-example-01.raml
+
+  post:
+    headers:
+      user_id:
+        required: false
+    body:
+      application/json:
+        type: customer-account
+        examples: !include /EXAMPLES/createCustomerAccount_example.raml
+    responses:
+      201:
+        body:
+          application/json:
+            example: {"message": "Account Created"}          
+
+  
+        
+      
+        
+          
+
+      
+          
+      
